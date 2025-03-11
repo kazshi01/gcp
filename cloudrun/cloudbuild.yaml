@@ -22,4 +22,3 @@ images:
 logsBucket: 'gs://${PROJECT_ID}-cloudbuild-logs'
 options:
   logging: 'GCS_ONLY'
-  defaultLogsBucketBehavior: 'REGIONAL_USER_OWNED_BUCKET'
