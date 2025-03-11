@@ -19,6 +19,5 @@ images:
   - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/${_IMAGE_NAME}:latest'
 
 # ログの設定
-logsBucket: 'gs://encoded-copilot-453019-e7-cloudbuild-logs'
 options:
-  logging: 'GCS_ONLY'
+  logging: 'CLOUD_LOGGING_ONLY'
