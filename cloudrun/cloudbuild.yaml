@@ -17,3 +17,9 @@ substitutions:
 # ビルドされるイメージ
 images:
   - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/${_IMAGE_NAME}:latest'
+
+# ログの設定
+logsBucket: 'gs://${PROJECT_ID}-cloudbuild-logs'
+options:
+  logging: 'GCS_ONLY'
+  defaultLogsBucketBehavior: 'REGIONAL_USER_OWNED_BUCKET'
