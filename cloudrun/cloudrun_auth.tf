@@ -15,14 +15,3 @@ resource "google_cloudbuildv2_repository" "github_repository" {
   parent_connection = google_cloudbuildv2_connection.github_connection.id
   remote_uri = local.github_repository_remote_uri
 }
-
-resource "google_project_iam_member" "cloudbuild_iam" {
-  for_each = toset([
-    "roles/run.admin",
-    "roles/iam.serviceAccountUser",
-    "roles/secretmanager.secretAccessor",
-  ])
-  role    = each.key
-  member  = "serviceAccount:${local.project_number}@cloudbuild.gserviceaccount.com"
-  project = local.project_id
-}
