@@ -12,7 +12,7 @@ resource "google_cloud_run_v2_service" "default" {
   template {
     containers {
       # 互換性のあるNginxイメージを使用
-      # image = "asia-northeast1-docker.pkg.dev/encoded-copilot-453019-e7/test-repo/nginx:latest"
+      # image = "${local.region}-docker.pkg.dev/${local.project_id}/test-repo/nginx:latest"
       image = "nginx:stable"
       
       # Nginxのポート設定

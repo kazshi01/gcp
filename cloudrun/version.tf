@@ -1,8 +1,7 @@
 # Terraformのプロバイダー設定
 provider "google" {
-  project = "encoded-copilot-453019-e7"  # プロジェクトID
-  region  = "asia-northeast1"            # 東京リージョン
-  zone    = "asia-northeast1-a"
+  project = local.project_id  # プロジェクトID
+  region  = local.region            # 東京リージョン
 }
 
 terraform {
