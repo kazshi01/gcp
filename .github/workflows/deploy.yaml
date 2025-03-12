@@ -30,20 +30,26 @@ jobs:
           workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
           service_account: ${{ secrets.SA_EMAIL }}
       
-      - id: 'build'
-        name: 'Build and push container image'
-        uses: 'google-github-actions/build-and-push-container@v0'
+      - name: 'Login to Artifact Registry'
+        uses: docker/login-action@v2
         with:
-          project_id: ${{ env.PROJECT_ID }}
-          region: ${{ env.REGION }}
-          repository: ${{ env.REPOSITORY }}
-          image_name: ${{ env.SERVICE_NAME }}
+          registry: ${{ env.REGION }}-docker.pkg.dev
+          username: _json_key
+          password: ${{ steps.auth.outputs.access_token }}
+      
+      - name: 'Build and push Docker image'
+        id: build-image
+        uses: docker/build-push-action@v3
+        with:
           context: ./cloudrun
-          
+          push: true
+          tags: |
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
+      
       - id: 'deploy-cloud-run'
-        name: 'Deploy Cloud Run Hello World Python App'
+        name: 'Deploy Cloud Run App'
         uses: 'google-github-actions/deploy-cloudrun@v1'
         with:
           service: ${{ env.SERVICE_NAME }}
           region: ${{ env.REGION }}
-          image: ${{ steps.build.outputs.image }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
