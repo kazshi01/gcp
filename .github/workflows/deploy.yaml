@@ -38,6 +38,7 @@ jobs:
           region: ${{ env.REGION }}
           repository: ${{ env.REPOSITORY }}
           image_name: ${{ env.SERVICE_NAME }}
+          context: ./cloudrun
           
       - id: 'deploy-cloud-run'
         name: 'Deploy Cloud Run Hello World Python App'
