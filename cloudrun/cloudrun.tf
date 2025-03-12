@@ -27,10 +27,10 @@ resource "google_cloud_run_v2_service" "default" {
 
       # ヘルスチェックの設定
       startup_probe {
-        initial_delay_seconds = 30
-        timeout_seconds       = 10
+        initial_delay_seconds = 3
+        timeout_seconds       = 2
         period_seconds        = 5
-        failure_threshold     = 5
+        failure_threshold     = 1
         tcp_socket {
           port = 80
         }
