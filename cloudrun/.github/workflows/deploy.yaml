@@ -1,0 +1,48 @@
+name: apply on merge
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGION: asia-northeast1
+  PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  SERVICE_NAME: cloudrun-service
+  REPOSITORY: test-repo
+
+jobs:
+  build-and-deploy:
+    permissions:
+      id-token: write
+      contents: read
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+          
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          create_credentials_file: true
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.SA_EMAIL }}
+      
+      - id: 'build'
+        name: 'Build and push container image'
+        uses: 'google-github-actions/build-and-push-container@v0'
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          region: ${{ env.REGION }}
+          repository: ${{ env.REPOSITORY }}
+          image_name: ${{ env.SERVICE_NAME }}
+          
+      - id: 'deploy-cloud-run'
+        name: 'Deploy Cloud Run Hello World Python App'
+        uses: 'google-github-actions/deploy-cloudrun@v1'
+        with:
+          service: ${{ env.SERVICE_NAME }}
+          region: ${{ env.REGION }}
+          image: ${{ steps.build.outputs.image }}

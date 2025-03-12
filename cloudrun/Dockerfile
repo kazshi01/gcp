@@ -1,1 +1,1 @@
-FROM --platform=linux/amd64 nginx:latest
+FROM nginx:stable

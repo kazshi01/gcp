@@ -12,7 +12,6 @@ resource "google_cloud_run_v2_service" "default" {
   template {
     containers {
       # 互換性のあるNginxイメージを使用
-      # image = "${local.region}-docker.pkg.dev/${local.project_id}/test-repo/nginx:latest"
       image = "nginx:stable"
       
       # Nginxのポート設定
@@ -41,6 +40,13 @@ resource "google_cloud_run_v2_service" "default" {
     # サービスアカウント
     service_account = google_service_account.cloudrun_sa.email
   }
+
+  lifecycle {
+    ignore_changes = [
+      template[0].containers[0].image,
+    ]
+  }
+
 }
 
 # Cloud Run用のサービスアカウント
